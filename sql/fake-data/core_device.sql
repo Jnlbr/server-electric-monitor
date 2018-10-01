@@ -1,0 +1,1 @@
+INSERT INTO core_device (fk_core_device_type, fk_core_license, name, status) VALUES (1, (SELECT pk_core_license FROM core_license WHERE core_license.code = '8H 4Y20E56VV01A3X9N05FTQC1BES1FT8GXLLHK230MWD32XVC8AF1P33RUF8PHV'), 'Some device', true);

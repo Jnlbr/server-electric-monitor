@@ -1,0 +1,1 @@
+INSERT INTO core_device_type (name) VALUES ('CURRENT_SENSOR');
