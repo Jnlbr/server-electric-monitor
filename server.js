@@ -1,14 +1,12 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import routes from './src/routes';
+// import passport from 'passport';
+// import session from 'express-session';
 
 // Environment variables support
 // require('dotenv').config()
-const result = dotenv.config()
-if(result.error) {
-  throw result.error;
-}
+
 
 // Const
 const app = express();
@@ -17,6 +15,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+// app.use(session({
+//   secret: 'catlovedogs',
+//   resave: false,
+//   saveUninitialized: false,
+// }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 app.use('/', routes);
 
 app.listen(process.env.PORT, () => {
