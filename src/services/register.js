@@ -30,6 +30,7 @@ function userRegister(userId,code) {
         );
         try {
           let preferences = await createPreference([userId], devices.map(d => d.pkcoredevice)); // ids;
+          console.log(preferences)
           await user.update({
             column: 'fk_core_license',
             value: _license.id,
@@ -86,6 +87,7 @@ function deviceRegister(type,code,name,status) {
       
       try {
         let preferences = await createPreference(users.map(u => u.pkcoreappuser), [_device.id]);
+        console.log(preferences)
         return {
           status: 200,
           body: {
@@ -108,9 +110,32 @@ function deviceRegister(type,code,name,status) {
   })
 }
 
+function tokenRegister(userId,token) {
+  return db.task(async t => {
+    const userDAO = new UserDAO(t);
+
+    try {
+      await userDAO.update({
+        column: 'notification_token',
+        value: token,
+        userId: userId
+      });
+      return {
+        status: 200,
+        body: {
+          message: 'Token updated'
+        }
+      }
+    } catch(err) {
+      throw err;
+    }
+  })
+}
+
 export default {
   userRegister,
-  deviceRegister
+  deviceRegister,
+  tokenRegister,
 }
 
 function createPreference(users, devices) {

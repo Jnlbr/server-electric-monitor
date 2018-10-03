@@ -29,7 +29,24 @@ const deviceRegister = async (req,res) => {
   }); 
 }
 
+const tokenRegister = async (req,res) => {
+  const send = (status,body) => res.status(status).send({status,body});
+  const token = req.body.token;
+  const { userId } = req.ids;
+
+  console.log('token register')
+  registerService.tokenRegister(userId, token)
+  .then(({status,body}) => send(status,body))
+  .catch(err => {
+    // ADD LOGGER
+    console.log('SET NOTIFICATION TOKEN ERR: ');
+    console.log(err);
+    send(500, err.message || err);
+  })
+}
+
 export default {
   userRegister,
-  deviceRegister
+  deviceRegister,
+  tokenRegister
 }

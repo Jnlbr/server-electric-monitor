@@ -48,7 +48,7 @@ const login = async (req,res) => {
   try {
     let index = validator.isEmail(username) ? 'email' : 'username';
     let _user = await user.find(index, username, ['fk_core_license', 'pk_core_app_user', 'email', 'username', 'firstname', 'lastname', 'password']);
-    
+    _user = _user[0];
     if(_user) {
       const isMatch = await crypt.compare(password, _user.password);
 
@@ -70,6 +70,7 @@ const login = async (req,res) => {
       send(200, { message: 'User does not exist'});
     }    
   } catch(err) {
+    console.log(err);
     send(500, err.message || err);
   }
 }

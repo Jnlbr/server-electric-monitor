@@ -4,12 +4,8 @@ class License {
   constructor(db) {
     this.db = db;
   }
-
   select(code) {
     return this.db.oneOrNone(sql.LICENSE_FIND, [code]);
-  }
-  update() {
-
   }
 }
 
