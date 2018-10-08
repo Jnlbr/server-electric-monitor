@@ -1,9 +1,9 @@
 import express from 'express';
-import { devicesController } from '../controllers';
+import { levelController } from '../controllers';
 import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
 
-router.post('/level/create', verifyToken, devicesController.createLevel);
+router.post('/create', verifyToken, levelController.create);
 
 export default router;
