@@ -23,6 +23,9 @@ class Device {
   findNotificationByType(type) {
     return this.db.any(sql.FIND_NOTIFICATION_BY_TYPE, [type]);
   }
+  get(licenseId) {
+    return this.db.any(sql.DEVICE_GET, [licenseId]);
+  }
 }
 
 export default Device;
