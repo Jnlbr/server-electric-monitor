@@ -1,11 +1,11 @@
 import status from 'http-status';
 import { deviceService } from '../services';
 
-const get = async (req, res) => {
-  const { licenseId } = req.ids;
+const getByUser = async (req, res) => {
+  const { userId } = req.ids;
   const send = (status,body) => res.status(status).send({status,body});
 
-  deviceService.get(licenseId)
+  deviceService.getByUser(userId)
   .then(data => {
     send(200, data)
   })
@@ -16,5 +16,5 @@ const get = async (req, res) => {
 }
 
 export default {
-  get,
+  getByUser,
 }

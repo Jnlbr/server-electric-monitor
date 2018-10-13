@@ -7,24 +7,18 @@ class Device {
     this.qm = new QueryMaker();
     this.table = 'core_device';
   }
-
   create(deviceType,licenseId,name,status) {
-    return this.db.one(sql.DEVICE_ADD, [deviceType,licenseId,name,status]);
+    return this.db.one(sql.ADD, [deviceType,licenseId,name,status]);
   }
-  find(index,value,columns, inner = null) {
-    let query;
-    if(inner) {
-      query = this.qm.select(this.table, columns).inner(inner, 'fk_core_device_type', 'pk_core_device_type').equal(index, value).make();
-    } else {
-      query = this.qm.select(this.table, columns).equal(index, value).make();
-    }
+  find(index,value,columns) {
+    let query = this.qm.select(this.table, columns).equal(index, value).make();
     return this.db.any(query);
   }
-  findNotificationByType(type) {
-    return this.db.any(sql.FIND_NOTIFICATION_BY_TYPE, [type]);
-  }
-  get(licenseId) {
-    return this.db.any(sql.DEVICE_GET, [licenseId]);
+  // findNotificationByType(type) {
+  //   return this.db.any(sql.FIND_NOTIFICATION_BY_TYPE, [type]);
+  // }
+  findByUser(userId) {
+    return this.db.any(sql.FIND_BY_LICENSE, [userId]);
   }
 }
 
