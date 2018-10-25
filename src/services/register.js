@@ -96,6 +96,7 @@ function deviceRegister(type,code,name,status) {
           }
         }
       } catch(err) {
+        // Retornar el id del device, y hacer un task, unica y exclusivamente para crear las pref
         throw err;
       }
 
