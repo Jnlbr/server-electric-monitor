@@ -7,7 +7,7 @@ function getByUser(userId) {
     const deviceDAO = new DeviceDAO(t);
 
     try {
-      let devices = await deviceDAO.findByUser(userId);
+      let devices = await deviceDAO.getAll(userId);
 
       return devices;
     } catch(err) {

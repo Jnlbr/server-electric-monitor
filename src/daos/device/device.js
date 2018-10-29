@@ -17,7 +17,7 @@ class Device {
   // findNotificationByType(type) {
   //   return this.db.any(sql.FIND_NOTIFICATION_BY_TYPE, [type]);
   // }
-  findByUser(userId) {
+  getAll(userId) {
     return this.db.any(sql.FIND_BY_LICENSE, [userId]);
   }
 }
