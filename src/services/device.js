@@ -2,7 +2,7 @@ import db from '../config/db';
 import { DeviceDAO } from '../daos';
 
 // METER MAS MANO
-function getByUser(userId) {
+function getAll(userId) {
   return db.task(async t => {
     const deviceDAO = new DeviceDAO(t);
 
@@ -17,5 +17,5 @@ function getByUser(userId) {
 }
 
 export default {
-  getByUser,
+  getAll,
 }
