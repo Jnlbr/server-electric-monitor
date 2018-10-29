@@ -101,7 +101,7 @@ create domain short_string as VARCHAR(16);
 /*==============================================================*/
 /* Domain: "timestamp"                                          */
 /*==============================================================*/
-create domain "timestamp" as DATE;
+create domain "timestamp" as TIMESTAMP;
 
 /*==============================================================*/
 /* Domain: very_long_string                                     */
@@ -300,7 +300,9 @@ pk_core_license
 create table main_device_current (
    pk_main_device_current ids                  not null default nextval('main_device_current_seq'),
    fk_core_device       ids                  not null,
-   value                "int"                not null,
+   voltage                "int"                ,
+   amps                "int"                ,
+   watts                "int"                ,
    "time"               "timestamp"          not null,
    constraint PK_MAIN_DEVICE_CURRENT primary key (pk_main_device_current)
 );
