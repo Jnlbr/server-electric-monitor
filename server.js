@@ -1,16 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './src/routes';
-import { userSocket, deviceSocket } from './src/sockets';
-// import * as WebSocket from 'ws';
+import * as io from 'socket.io';
 
-// Const
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
+// const http = require('http');
+// const server = http.createServer(app);
 // const io = require('socket.io').listen(server);
-const Server = require('socket.io');
-const io = new Server();
+// const Server = require('socket.io');
+// const io = new Server();
 // const io2 = new Server();
 // const io = require('socket.io')(server, {
 //   path: '/test1'
@@ -22,7 +20,7 @@ const io = new Server();
 // io.origins
 // io.path('/test1')
 // io.origins('*:*');
-io.listen(server);
+// io.listen(server);
 // io2.lister(server)
 // (server, {
 //   path: '/test', 
@@ -40,12 +38,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use('/', routes);
 // Sockets routes
-io.of('/test1').use((socket,next) => {
-  console.log('MIDDLEWARE');
-  return next();
-})
-io.of('/test1').on('connection', userSocket);
-io.of('/test2').on('connection', deviceSocket);
+// io.of('/test1').use((socket,next) => {
+//   console.log('MIDDLEWARE');
+//   return next();
+// })
+// io.of('/test1').on('connection', userSocket);
+// io.of('/test2').on('connection', deviceSocket);
 
 // (socket) => {
 //   console.log('user connected 1');
@@ -71,6 +69,6 @@ io.of('/test2').on('connection', deviceSocket);
 //   });
 // })
 
-server.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port ${process.env.PORT}`);
 });
