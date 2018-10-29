@@ -14,6 +14,9 @@ class User {
   update({column,value,userId}) {
     return this.db.none(sql.USER_UPDATE, [column,value,userId]);
   }
+  exist(column, value) {
+    return this.db.oneOrNone(sql.FIELD_EXIST, [column,value]);
+  }
   select({column,alias,userId}) {
     return this.db.oneOrNone(sql.USER_SELECT, [column, alias, userId]);
   }

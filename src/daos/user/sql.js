@@ -17,4 +17,9 @@ export default {
    * 
    */
   USER_CREATE: 'INSERT INTO core_app_user (email, username, password, firstname, lastname) VALUES ($1,$2,$3,$4,$5) RETURNING pk_core_app_user AS id',
+
+  /**
+   * 
+   */
+  FIELD_EXIST: 'SELECT pk_core_app_user FROM core_app_user WHERE $1~ = $2'
 }

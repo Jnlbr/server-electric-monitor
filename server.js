@@ -4,6 +4,13 @@ import routes from './src/routes';
 import * as io from 'socket.io';
 
 const app = express();
+
+// Express initial configuration
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use('/', routes);
+
 // const http = require('http');
 // const server = http.createServer(app);
 // const io = require('socket.io').listen(server);
@@ -32,11 +39,7 @@ const app = express();
 // });
 // io.listen(server)
 
-// Express initial configuration
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use('/', routes);
+
 // Sockets routes
 // io.of('/test1').use((socket,next) => {
 //   console.log('MIDDLEWARE');
@@ -69,6 +72,10 @@ app.use('/', routes);
 //   });
 // })
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}`);
+const server = app.listen(
+  process.env.PORT, 
+  () => {
+    console.log(`Example app listening on port ${process.env.PORT}`);
 });
+
+export default server;

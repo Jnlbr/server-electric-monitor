@@ -11,16 +11,24 @@ const signup = async (req, res) => {
 
   if(validator.isEmail(email)) {
     db.task(async t => {
-      const user = new UserDAO(t);
+      console.log('AUTH_SIGN_UP: VALID DATA');
+      const user = new UserDAO(t);      
 
-      let _email = await user.find('email', email);
-      if(_email)
-        return send(409, {message: 'Email already registered'});
+      let _email = await user.exist('email', email);
+      if(_email) {
+        console.log(_email)
+        console.log('AUTH_SIGN_UP: EMAIL ALREADY REGISTERED');
+        return send(409, { message: 'Email already registered' });
+      }
+        
       else {
-        let _username = await user.find('username', username);
-        if(_username)
-          return send(409, {message: 'Username already registered'});
+        let _username = await user.exist('username', username);
+        if(_username) {
+          console.log('AUTH_SIGN_UP: USERNAME ALREADY REGISTERED');
+          return send(409, { message: 'Username already registered' });
+        }          
         else {
+          console.log('AUTH_SIGN_UP: NEW USER');
           const hash = crypt.hash(password);
           let _user = await user.create({...req.body, password: hash});
           const token = signToken({ userId: _user.id });
