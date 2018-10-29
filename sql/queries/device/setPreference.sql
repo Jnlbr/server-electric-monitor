@@ -1,0 +1,1 @@
+UPDATE main_notification_preference SET status = $2 WHERE pk_main_not_pref = $1
