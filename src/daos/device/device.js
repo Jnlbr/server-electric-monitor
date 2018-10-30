@@ -14,9 +14,9 @@ class Device {
     let query = this.qm.select(this.table, columns).equal(index, value).make();
     return this.db.any(query);
   }
-  // findNotificationByType(type) {
-  //   return this.db.any(sql.FIND_NOTIFICATION_BY_TYPE, [type]);
-  // }
+  updateName(id, name) {
+    return this.db.none(sql.UPDATE_FIELD, [id,name]);
+  }
   getAll(userId) {
     return this.db.any(sql.FIND_BY_LICENSE, [userId]);
   }

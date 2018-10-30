@@ -35,16 +35,31 @@ const setPreference = (req,res) => {
   const send = (status,body) => res.status(status).send({status,body});
 
   deviceService.setPreference(preferences)
-  .then(data => {
-    send(200, data);
+  .then(() => {
+    send(200, { message: 'Success' });
   })
   .catch(err => {
     send(400, err.message || err);
   })
 }
 
+const updateName = (req,res) => {
+  const { id, name } = req.body;
+  // const { userId } = req.ids;
+  const send = (status,body) => res.status(status).send({status,body});
+
+  deviceService.updateName(id,name)
+  .then(() => {
+    send(200, { message: 'Success' });
+  })
+  .catch(err => {
+    send(400, err.message || err)
+  })
+}
+
 export default {
   getAll,
   getPreference,
-  setPreference
+  setPreference,
+  updateName
 }

@@ -40,8 +40,19 @@ function setPreference(preferences) {
   });
 }
 
+async function updateName(id,name) {
+  const deviceDAO = new DeviceDAO(db);
+
+  try {
+    return await deviceDAO.updateName(id,name);
+  } catch (err) {
+    throw err;
+  }
+}
+
 export default {
   getAll,
   getPreference,
-  setPreference
+  setPreference,
+  updateName
 }
