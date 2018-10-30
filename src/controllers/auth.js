@@ -4,6 +4,20 @@ import crypt from '../util/crypt';
 import signToken from '../util/signToken';
 import db from '../config/db';
 import { UserDAO } from '../daos';
+import { authService } from '../services'
+
+const userData = async (req,res) => {
+  const { userId } = req.ids;
+  const send = (status, body) => res.status(status).send({ status, body });
+
+  authService.userData(userId)
+  .then(data => {
+    send(200, data);
+  })
+  .catch(err => {
+    send(400, err.message || err);
+  });
+}
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
@@ -85,5 +99,6 @@ const login = async (req,res) => {
 
 export default {
   signup,
-  login
+  login,
+  userData
 }
