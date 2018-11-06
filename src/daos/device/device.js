@@ -15,10 +15,13 @@ class Device {
     return this.db.any(query);
   }
   updateName(id, name) {
-    return this.db.none(sql.UPDATE_FIELD, [id,name]);
+    return this.db.none(sql.UPDATE_NAME, [id,name]);
   }
   getAll(userId) {
     return this.db.any(sql.FIND_BY_LICENSE, [userId]);
+  }
+  updateStatus(id,status) {
+    return this.db.none(sql.UPDATE_STATUS, [id,status]);
   }
 }
 

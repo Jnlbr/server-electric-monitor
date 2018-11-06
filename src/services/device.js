@@ -50,9 +50,20 @@ async function updateName(id,name) {
   }
 }
 
+async function updateStatus(id, status) {
+  const deviceDAO = new DeviceDAO(db);
+
+  try {
+    return await deviceDAO.updateStatus(id, status);
+  } catch (err) {
+    throw err;
+  }
+}
+
 export default {
   getAll,
   getPreference,
   setPreference,
-  updateName
+  updateName,
+  updateStatus
 }
