@@ -1,5 +1,5 @@
 import db from '../config/db';
-import {ParamsDAO} from '../daos';
+import { ParamsDAO } from '../daos';
 
 
 async function add(id, params) {
@@ -7,11 +7,11 @@ async function add(id, params) {
 
   try {
     return await paramsDAO.add(id, params);
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
 }
 
 export default {
-  add,
+  add
 }
