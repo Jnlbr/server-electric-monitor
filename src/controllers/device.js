@@ -57,23 +57,9 @@ const updateName = (req,res) => {
   })
 }
 
-const updateStatus = (req, res) => {
-  const { id, status } = req.body;
-  const send = (status, body) => res.status(status).send({ status, body });
-
-  deviceService.updateStatus(id, status)
-  .then(() => {
-    send(200, { message: 'Success' });
-  })
-  .catch(err => {
-    send(400, err.message || err)
-  });
-}
-
 export default {
   getAll,
   getPreference,
   setPreference,
-  updateName,
-  updateStatus
+  updateName
 }

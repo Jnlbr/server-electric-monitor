@@ -1,6 +1,5 @@
 import db from '../config/db';
-import { ParamsDAO } from '../daos';
-
+import { ParamsDAO, DeviceDAO } from '../daos';
 
 async function add(id, params) {
   const paramsDAO = new ParamsDAO(db);
@@ -12,6 +11,17 @@ async function add(id, params) {
   }
 }
 
+async function updateStatus(id, status) {
+  const deviceDAO = new DeviceDAO(db);
+
+  try {
+    return await deviceDAO.updateStatus(id, status);
+  } catch (err) {
+    throw err;
+  }
+}
+
 export default {
-  add
+  add,
+  updateStatus
 }

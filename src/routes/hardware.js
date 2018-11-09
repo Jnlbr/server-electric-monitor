@@ -1,11 +1,9 @@
 import express from 'express';
-// import { deviceController } from '../controllers';
-import verifyToken from '../middlewares/verifyToken';
+import { hardwareController } from '../controllers';
 
 const router = express.Router();
 
-router.post('/param', (req,res) => {
-  console.log(req.body);
-})
+router.post('/params/add', hardwareController.addParams);
+router.put('/update/status', hardwareController.updateStatus);
 
 export default router;

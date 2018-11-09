@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './src/routes';
-import * as io from 'socket.io';
+const socket = require('socket.io');
 
 const app = express();
 
@@ -14,9 +14,7 @@ app.use(function (req,res,next) {
   res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
   res.header("Access-Control-Allow-Credentials", true);
   next();
-})
-app.use('/', routes);
-
+});
 // const http = require('http');
 // const server = http.createServer(app);
 // const io = require('socket.io').listen(server);
@@ -84,4 +82,10 @@ const server = app.listen(
     console.log(`Example app listening on port ${process.env.PORT}`);
 });
 
-export default server;
+const io = require('./src/sockets').init(server);
+
+app.use((req, res, next) => { 
+  req.socket = io; 
+  next();
+});
+app.use('/', routes);

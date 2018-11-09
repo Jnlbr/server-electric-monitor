@@ -8,6 +8,5 @@ router.get('/get/all', verifyToken, deviceController.getAll);
 router.get('/get/preference/:deviceId', verifyToken, deviceController.getPreference);
 router.put('/update/preference', verifyToken, deviceController.setPreference);
 router.put('/update/name', verifyToken, deviceController.updateName);
-router.put('/update/status', verifyToken, deviceController.updateStatus);
 
 export default router;
