@@ -10,7 +10,7 @@ const addParams = (req,res) => {
 
   hardwareService.add(id,params)
   .then(() => {
-    socket.emit('params:' + id, {
+    socket.of('/user').emit('params:' + id, {
       ...params,
     });
     send(200, { 'message': 'success' });
@@ -24,9 +24,13 @@ const addParams = (req,res) => {
 const updateStatus = (req,res) => {
   const { id, status } = req.body;
   const send = (status, body) => res.status(status).send({ status, body });
+  let socket = req.socket;
 
   hardwareService.updateStatus(id, status)
   .then(() => {
+    socket.emit('stateChange:' + id, {
+     state: status
+    });
     send(200, { message: 'Success' });
   })
   .catch(err => {
