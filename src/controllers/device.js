@@ -43,6 +43,30 @@ const setPreference = (req,res) => {
   })
 }
 
+const getParams = (req,res) => {
+  const { id, from } = req.params;
+
+  deviceService.getParams(id,from)
+  .then(data => {
+
+  })
+  .catch(err => {
+
+  })
+}
+
+const getAllParams = (req,res) => {
+  const { from } = req.params;
+
+  deviceService.getParams(id, from)
+  .then(data => {
+
+  })
+  .catch(err => {
+
+  })
+}
+
 const updateName = (req,res) => {
   const { id, name } = req.body;
   // const { userId } = req.ids;
@@ -61,5 +85,7 @@ export default {
   getAll,
   getPreference,
   setPreference,
-  updateName
+  updateName,
+  getParams,
+  getAllParams
 }

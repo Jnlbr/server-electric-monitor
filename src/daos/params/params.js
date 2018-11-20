@@ -7,7 +7,7 @@ class Params {
   }
 
   add(id,params) {
-    return this.db.none(sql.INSERT_PARAMS, [id, params.amps, params.voltage, params.watts]);
+    return this.db.none(sql.INSERT_PARAMS, [id, params.amps, params.watts]);
   }
 
 }

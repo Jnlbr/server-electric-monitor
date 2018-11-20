@@ -1,5 +1,5 @@
 import db from '../config/db';
-import { DeviceDAO, UserPreferenceDAO } from '../daos';
+import { DeviceDAO, UserPreferenceDAO, ParamsDAO } from '../daos';
 
 // METER MAS MANO
 function getAll(userId) {
@@ -50,9 +50,31 @@ async function updateName(id,name) {
   }
 }
 
+async function getParams(id, from) {
+  const paramsDAO = new ParamsDAO(db);
+
+  try {
+
+  } catch(err) {
+    throw err;
+  }
+}
+
+async function getAllParams(id, from) {
+  const paramsDAO = new ParamsDAO(db);
+
+  try {
+
+  } catch (err) {
+    throw err;
+  }
+}
+
 export default {
   getAll,
   getPreference,
   setPreference,
-  updateName
+  updateName,
+  getParams,
+  getAllParams
 }
