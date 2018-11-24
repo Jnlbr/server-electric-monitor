@@ -26,6 +26,8 @@ const updateStatus = (req,res) => {
   const send = (status, body) => res.status(status).send({ status, body });
   let socket = req.socket;
 
+  console.log('Device: ' + id + ' fue encendido? ' + status);
+
   hardwareService.updateStatus(id, status)
   .then(() => {
     socket.emit('stateChange:' + id, {
