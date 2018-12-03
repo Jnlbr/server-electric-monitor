@@ -21,5 +21,10 @@ export default {
   /**
    * 
    */
-  FIELD_EXIST: 'SELECT pk_core_app_user FROM core_app_user WHERE $1~ = $2'
+  FIELD_EXIST: 'SELECT pk_core_app_user FROM core_app_user WHERE $1~ = $2',
+
+  /**
+   * 
+   */
+  GET_TOKENS: 'SELECT CAU.notification_token as token FROM core_app_user AS CAU INNER JOIN core_license cl on CAU.fk_core_license = cl.pk_core_license WHERE cl.pk_core_license = $1 AND CAU.notification_token IS NOT NULL;'
 }

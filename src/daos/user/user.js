@@ -24,6 +24,9 @@ class User {
     let query = this.qm.select(this.table, columns).equal(index,value).make();
     return this.db.any(query);
   }
+  getTokens(licenseId) {
+    return this.db.manyOrNone(sql.GET_TOKENS, [licenseId]);
+  }
 }
 
 export default User;

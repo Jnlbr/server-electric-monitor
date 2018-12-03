@@ -1,40 +1,34 @@
 import Expo from 'expo-server-sdk';
 
-const token = req.body.token.value;
+let expo = new Expo();
 
-export default () => {
-  if (Expo.isExpoPushToken(token)) {
-    const messages = [{
-      to: token,
+export default (tokens, message) => {
+
+  let messages = [];
+  for (let pushToken of tokens) {
+    if (!Expo.isExpoPushToken(pushToken)) {
+      console.error(`Push token ${pushToken} is not a valid Expo push token`);
+      continue;
+    }
+    messages.push({
+      to: pushToken,
       sound: 'default',
-      body: 'testing',
-      data: { withSome: 'data' }
-    }]
-    let chunks = expo.chunkPushNotifications(messages);
-    chunks.forEach(async chunk => {
-      try {
-        let ticket = await expo.sendPushNotificationsAsync(chunk);
-        console.log(ticket);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+      body: message,
+      data: { withSome: message },
+    })
   }
+
+  let chunks = expo.chunkPushNotifications(messages);
+  let tickets = [];
+  (async () => {
+    for (let chunk of chunks) {
+      try {
+        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+        console.log(ticketChunk);
+        tickets.push(...ticketChunk);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  })();
 }
-// const message = {
-  //   data: {
-  //     score: '850',
-  //     time: '2:45'
-  //   },
-  //   topic: 's',
-  //   condition:'s',
-  //   token: req.body.token,
-  // };
-  // fb.messaging().send(message)
-  // .then(res => {
-  //   console.log(res);
-  // })
-  // .catch(err => {
-  //   console.log('ERROR IN FB MESSAGING!');
-  //   console.log(err.message || err);
-  // })

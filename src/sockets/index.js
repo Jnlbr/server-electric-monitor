@@ -7,14 +7,14 @@ module.exports.init = (server) => {
   io.on(
     'connection',
     (socket) => {
-      console.log('A user or device connected to general room');      
+      console.log('Device connected to general room');      
     }
   );
 
   io.on(
     'disconnect',
     (socket) => {
-      console.log('A user or device disconnected from general room')
+      console.log('Device disconnected from general room')
     }
   )
 

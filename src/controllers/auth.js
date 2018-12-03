@@ -4,7 +4,7 @@ import crypt from '../util/crypt';
 import signToken from '../util/signToken';
 import db from '../config/db';
 import { UserDAO } from '../daos';
-import { authService } from '../services'
+import { authService, registerService } from '../services'
 
 const userData = async (req,res) => {
   const { userId } = req.ids;
@@ -20,7 +20,7 @@ const userData = async (req,res) => {
 }
 
 const signup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, code } = req.body;
   const send = (status,body) => ({ status, body });
 
   if(validator.isEmail(email)) {
@@ -45,7 +45,24 @@ const signup = async (req, res) => {
           console.log('AUTH_SIGN_UP: NEW USER');
           const hash = crypt.hash(password);
           let _user = await user.create({...req.body, password: hash});
-          const token = signToken({ userId: _user.id });
+          return registerService.userRegister(_user.id, code)
+          .then(({status, body}) => {
+            console.log(status);
+            console.log(body);
+            return send(status, {
+              ...body,
+              email,
+              username,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
+            })
+          })
+          .catch(err => {
+            // ADD LOGGER
+            console.log('USER REGISTER ERR: ' + err.message);
+            console.log(err);
+            return send(500, err.message || err);
+          })
           return send(200, { hasLicense: false, token });
         }
       }
