@@ -69,15 +69,16 @@ async function getAllByMonth(licenseId,year,month) {
     let current = group(data[0], colors);
     let power = group(data[1], colors);
 
-    return [
-      {
-        seriesName: 'Current',
-        data: current
-      }, {
-        seriesName: 'Power',
-        data: power
-      }
-    ]
+    // return [
+    //   {
+    //     seriesName: 'Current',
+    //     data: current
+    //   }, {
+    //     seriesName: 'Power',
+    //     data: power
+    //   }
+    // ]
+    return { current, power }
   })
   .catch(err => {
     throw err;

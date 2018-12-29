@@ -17,9 +17,13 @@ const userRegister = async (req,res) => {
 
 const deviceRegister = async (req,res) => {
   const send = (status,body) => res.status(status).send({status,body});
-  const { type, code, name, status } = req.body;
+  const { type, name, voltage } = req.body;
+  const { licenseId } = req.ids;
+  console.log('DEVICE REGISTER')
+  console.log(licenseId);
+  console.log(req.body);
 
-  registerService.deviceRegister(type,code,name,status)
+  registerService.deviceRegister(licenseId, req.body)
   .then(({status,body}) => send(status,body))
   .catch(err => {
     // ADD LOGGER

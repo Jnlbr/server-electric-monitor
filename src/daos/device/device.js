@@ -7,8 +7,8 @@ class Device {
     this.qm = new QueryMaker();
     this.table = 'core_device';
   }
-  create(deviceType,licenseId,name,status) {
-    return this.db.one(sql.ADD, [deviceType,licenseId,name,status]);
+  create(deviceType,licenseId,name, voltage) {
+    return this.db.one(sql.ADD, [deviceType,licenseId,name,voltage]);
   }
   find(index,value,columns) {
     let query = this.qm.select(this.table, columns).equal(index, value).make();
@@ -22,6 +22,12 @@ class Device {
   }
   updateStatus(id,status) {
     return this.db.none(sql.UPDATE_STATUS, [id,status]);
+  }
+  delete(id) {
+    return this.db.none(sql.DELETE, [id]);
+  }
+  updateActive(id, active) {
+    return this.db.none(sql.UPDATE_ACTIVE, [id,active])
   }
 }
 

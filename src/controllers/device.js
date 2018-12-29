@@ -1,6 +1,18 @@
 import status from 'http-status';
 import { deviceService } from '../services';
 
+const deleteDevice = (req,res) => {
+  const send = (status,body) => res.status(status).send({status,body});
+
+  deviceService.deleteDevice(req.body.id)
+  .then(() => {
+    send(200, 'Success');
+  })
+  .catch(err => {
+    send(400, err.message || err);
+  })
+}
+
 const getAll = (req, res) => {
   const { userId } = req.ids;
   const send = (status,body) => res.status(status).send({status,body});
@@ -87,5 +99,6 @@ export default {
   setPreference,
   updateName,
   getParams,
-  getAllParams
+  getAllParams,
+  deleteDevice
 }

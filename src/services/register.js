@@ -69,19 +69,17 @@ function userRegister(userId,code) {
   })
 }
 
-function deviceRegister(type,code,name,status) {
+function deviceRegister(licenseId, { type, name, voltage }) {
   return db.task(async t => {
     const license = new LicenseDAO(t);
 
-    let _license = await license.select(code);
-    if (_license) {
       const device = new DeviceDAO(t);
       const userDAO = new UserDAO(t);
       
-      let _device = await device.create(type, _license.id, name, status);
+      let _device = await device.create(type, licenseId, name, voltage);
       let users = await userDAO.find(
         'fk_core_license',
-        _license.id,
+        licenseId,
         ['pk_core_app_user'],
       );
       
@@ -99,15 +97,6 @@ function deviceRegister(type,code,name,status) {
         // Retornar el id del device, y hacer un task, unica y exclusivamente para crear las pref
         throw err;
       }
-
-    } else {
-      return {
-        status: 409, // CHECK THIS
-        body: {
-          message: 'License code not found'
-        }
-      }
-    }
   })
 }
 

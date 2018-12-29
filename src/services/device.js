@@ -1,6 +1,17 @@
 import db from '../config/db';
 import { DeviceDAO, UserPreferenceDAO, ParamsDAO } from '../daos';
 
+async function deleteDevice(id) {
+  const deviceDAO = new DeviceDAO(db);
+
+  try {
+    await deviceDAO.delete(id)
+    return;
+  } catch(err) {
+    throw err;
+  }
+}
+
 // METER MAS MANO
 function getAll(userId) {
   return db.task(async t => {
@@ -76,5 +87,6 @@ export default {
   setPreference,
   updateName,
   getParams,
-  getAllParams
+  getAllParams,
+  deleteDevice
 }

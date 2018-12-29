@@ -1,4 +1,6 @@
+import db from '../config/db';
 const socket = require('socket.io');
+import DeviceDAO from "../daos/device/device";
 
 var io;
 
@@ -7,7 +9,9 @@ module.exports.init = (server) => {
   io.on(
     'connection',
     (socket) => {
-      console.log('Device connected to general room');      
+      // const deviceDAO = new DeviceDAO(db);
+      console.log('Device connected to general room');
+      // deviceDAO.updateActive()
     }
   );
 

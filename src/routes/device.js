@@ -10,5 +10,6 @@ router.put('/update/preference', verifyToken, deviceController.setPreference);
 router.put('/update/name', verifyToken, deviceController.updateName);
 router.get('/param/get/:id/:from', deviceController.getParams);
 router.get('/param/getAll/:from', deviceController.getAllParams);
+router.delete('/delete', verifyToken, deviceController.deleteDevice);
 
 export default router;
