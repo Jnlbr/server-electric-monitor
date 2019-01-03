@@ -69,7 +69,7 @@ function userRegister(userId,code) {
   })
 }
 
-function deviceRegister(licenseId, { type, name, voltage }) {
+function deviceRegister(licenseId, userId, { type, name, voltage }) {
   return db.task(async t => {
     const license = new LicenseDAO(t);
 
@@ -85,12 +85,12 @@ function deviceRegister(licenseId, { type, name, voltage }) {
       
       try {
         let preferences = await createPreference(users.map(u => u.pkcoreappuser), [_device.id]);
-        console.log(preferences)
+        console.log({ id: _device.id, userId })
+        _device = await device.findByIdAndUser(_device.id, userId);
         return {
           status: 200,
           body: {
-            ..._device,
-            message: 'Success',
+            ..._device,            
           }
         }
       } catch(err) {

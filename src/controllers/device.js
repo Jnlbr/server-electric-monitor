@@ -1,6 +1,21 @@
 import status from 'http-status';
 import { deviceService } from '../services';
 
+const updateActive = (req,res) => {
+  const send = (status, body) => res.status(status).send({ status, body });
+  const { id, active } = req.body;
+
+  deviceService.updateActive(id,active)
+  .then(() => {
+    let message = active ? 'activated':'desactivated';
+    console.log(active)
+    send(200, `Success, device was ${message}`);
+  })
+  .catch(err => {
+    send(400, err.message || err);
+  })
+}
+
 const deleteDevice = (req,res) => {
   const send = (status,body) => res.status(status).send({status,body});
 
@@ -79,16 +94,25 @@ const getAllParams = (req,res) => {
   })
 }
 
-const updateName = (req,res) => {
-  const { id, name } = req.body;
-  // const { userId } = req.ids;
+const updateData = (req,res) => {
+  const { id, name, voltage } = req.body;
+  const { userId } = req.ids;
   const send = (status,body) => res.status(status).send({status,body});
-
-  deviceService.updateName(id,name)
-  .then(() => {
-    send(200, { message: 'Success' });
+  console.log(`
+    PACKAGE: controllers/device
+    METHOD: updateData
+    MESSAGE: method init
+  `);
+  deviceService.updateData(id, userId, { name, voltage })
+  .then((data) => {
+    send(200, data);
   })
   .catch(err => {
+    console.log(`
+    PACKAGE: controllers/device
+    METHOD: updateData
+    ERROR: ${err}
+  `);
     send(400, err.message || err)
   })
 }
@@ -97,8 +121,9 @@ export default {
   getAll,
   getPreference,
   setPreference,
-  updateName,
+  updateData,
   getParams,
   getAllParams,
-  deleteDevice
+  deleteDevice,
+  updateActive
 }

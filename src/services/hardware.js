@@ -1,14 +1,22 @@
 import db from '../config/db';
 import { ParamsDAO, DeviceDAO } from '../daos';
 
-async function add(id, params) {
-  const paramsDAO = new ParamsDAO(db);
-
-  try {
-    return await paramsDAO.add(id, params);
-  } catch (err) {
-    throw err;
-  }
+async function add(id, current) {
+  return db.tx(async t => {
+    const paramsDAO = new ParamsDAO(t);
+    const deviceDAO = new DeviceDAO(t);
+    try {
+      let device = await deviceDAO.findById(id);
+      let power = current * device.voltage;            
+      await paramsDAO.add(id, {current,power})      
+      power = Math.round((current * device.voltage) * 100) / 100
+      current = Math.round(current * 100) / 100
+      console.log({ current, power })
+      return { amps: current, watts: power };
+    } catch (err) {
+      throw err;
+    }
+  });
 }
 
 async function updateStatus(id, status) {

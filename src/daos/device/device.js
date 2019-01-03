@@ -14,8 +14,14 @@ class Device {
     let query = this.qm.select(this.table, columns).equal(index, value).make();
     return this.db.any(query);
   }
-  updateName(id, name) {
-    return this.db.none(sql.UPDATE_NAME, [id,name]);
+  findById(id) {
+    return this.db.one(sql.FIND_BY_ID, [id]);
+  }
+  findByIdAndUser(id,userId) {
+    return this.db.one(sql.FIND_BY_ID_AND_USER, [id,userId])
+  }
+  updateData(id, { name, voltage }) {
+    return this.db.none(sql.UPDATE_DATA, [id,name,voltage]);
   }
   getAll(userId) {
     return this.db.any(sql.FIND_BY_LICENSE, [userId]);

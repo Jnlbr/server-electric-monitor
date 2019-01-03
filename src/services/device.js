@@ -1,6 +1,17 @@
 import db from '../config/db';
 import { DeviceDAO, UserPreferenceDAO, ParamsDAO } from '../daos';
 
+async function updateActive(id,active) {
+  const deviceDAO = new DeviceDAO(db);
+
+  try {
+    await deviceDAO.updateActive(id,active)
+    return;
+  } catch (err) {
+    throw err;
+  }
+}
+
 async function deleteDevice(id) {
   const deviceDAO = new DeviceDAO(db);
 
@@ -51,11 +62,12 @@ function setPreference(preferences) {
   });
 }
 
-async function updateName(id,name) {
+async function updateData(id, userId, { name, voltage }) {
   const deviceDAO = new DeviceDAO(db);
 
   try {
-    return await deviceDAO.updateName(id,name);
+    await deviceDAO.updateData(id, { name, voltage });
+    return await deviceDAO.findByIdAndUser(id,userId);
   } catch (err) {
     throw err;
   }
@@ -85,8 +97,9 @@ export default {
   getAll,
   getPreference,
   setPreference,
-  updateName,
+  updateData,
   getParams,
   getAllParams,
-  deleteDevice
+  deleteDevice,
+  updateActive
 }

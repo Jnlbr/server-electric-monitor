@@ -2,13 +2,14 @@ import { hardwareService, notificationService } from "../services";
 
 const addParams = (req,res) => {
   let socket = req.socket;
-  const { id, params } = req.body;
+  let { id, current } = req.body;
   const send = (status, body) => res.status(status).send({ status, body });
 
-  hardwareService.add(id,params)
-  .then(() => {
+  current = parseFloat(current);
+  hardwareService.add(id,current)
+  .then((params) => {
     socket.of('/user').emit('params:' + id, {
-      ...params,
+        ...params
     });
     send(200, { 'message': 'success' });
   })
@@ -27,9 +28,7 @@ const updateStatus = (req,res) => {
 
   hardwareService.updateStatus(id, status)
   .then(() => {
-    socket.emit('stateChange:' + id, {
-     state: status
-    });
+    socket.emit('stateChange:' + id, status);
     let message = status ? 'Dispositivo encendido' : ' Dispositivo apagado';
     notificationService.sendMessage(req.ids.licenseId, message);
     send(200, { message: 'Success' });
