@@ -1,20 +1,23 @@
 import { hardwareService, notificationService } from "../services";
 
 const addParams = (req,res) => {
-  let socket = req.socket;
   let { id, current } = req.body;
   const send = (status, body) => res.status(status).send({ status, body });
-
-  current = parseFloat(current);
+  
+  current = parseFloat(current);  
   hardwareService.add(id,current)
   .then((params) => {
-    socket.of('/user').emit('params:' + id, {
+    req.socket.of('/user').emit('params:' + id, {
         ...params
     });
     send(200, { 'message': 'success' });
   })
   .catch(err => {
-    console.log('Hardware controller error: ' + err.message || err);
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: addParams
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err)
   });
 }
@@ -30,10 +33,15 @@ const updateStatus = (req,res) => {
   .then(() => {
     socket.emit('stateChange:' + id, status);
     let message = status ? 'Dispositivo encendido' : ' Dispositivo apagado';
-    notificationService.sendMessage(req.ids.licenseId, message);
+    notificationService.sendMessage(req.ids.licenseId, id, message);
     send(200, { message: 'Success' });
   })
   .catch(err => {
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: updateStatus
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err)
   });
 }
@@ -47,6 +55,11 @@ const getMonths = (req,res) => {
     send(200, data);
   })
   .catch(err => {
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: getMonths
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err);
   })
 }
@@ -60,6 +73,11 @@ const getAllMonths = (req,res) => {
     send(200, data);
   })
   .catch(err => {
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: getAllMonths
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err);
   })
 }
@@ -72,18 +90,22 @@ const getByMonth = (req, res) => {
   .then(data => {
     send(200, [
       {
-        seriesName: 'Current',
+        seriesName: 'Corriente',
         data: data[0],
         color: 'blue'
       }, {
-        seriesName: 'Power',
+        seriesName: 'Potencia',
         data: data[1],
         color: 'green'
       }
     ]);
   })
   .catch(err => {
-    console.log(err);
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: getByMonths
+      ERROR: ${err.message || err}
+    `);
     send(400, err);
   })
 }
@@ -97,7 +119,12 @@ const getAllByMonth = (req,res) => {
   .then(data => {
     send(200, data);    
   })
-  .catch(err => {
+  .catch(err => {    
+    console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: getAllByMonths
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err);
   })
 }

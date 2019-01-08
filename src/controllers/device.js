@@ -42,21 +42,6 @@ const getAll = (req, res) => {
   });
 }
 
-const getPreference = (req,res) => {
-  const { userId } = req.ids;
-  const { deviceId } = req.params;
-  const send = (status,body) => res.status(status).send({status,body});
-
-  deviceService.getPreference(userId,deviceId)
-  .then(data => {
-    send(200, data);
-  })
-  .catch(err => {
-    console.log(err);
-    send(400, err.message || err);
-  });
-}
-
 const setPreference = (req,res) => {
   const { preferences } = req.body;
   const send = (status,body) => res.status(status).send({status,body});
@@ -95,7 +80,7 @@ const getAllParams = (req,res) => {
 }
 
 const updateData = (req,res) => {
-  const { id, name, voltage } = req.body;
+  const { id, name, voltage, notifiable } = req.body;
   const { userId } = req.ids;
   const send = (status,body) => res.status(status).send({status,body});
   console.log(`
@@ -103,23 +88,22 @@ const updateData = (req,res) => {
     METHOD: updateData
     MESSAGE: method init
   `);
-  deviceService.updateData(id, userId, { name, voltage })
+  deviceService.updateData(id, userId, { name, voltage, notifiable })
   .then((data) => {
     send(200, data);
   })
   .catch(err => {
     console.log(`
-    PACKAGE: controllers/device
-    METHOD: updateData
-    ERROR: ${err}
-  `);
+      PACKAGE: controllers/device
+      METHOD: updateData
+      ERROR: ${err}
+    `);
     send(400, err.message || err)
   })
 }
 
 export default {
   getAll,
-  getPreference,
   setPreference,
   updateData,
   getParams,

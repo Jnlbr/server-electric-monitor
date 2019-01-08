@@ -33,4 +33,13 @@ export default {
    * 
    */
   GET_ALL_POWER_BY_MONTH: `SELECT cd.pk_core_device as id, cd.name, sum(mdp.watts) as y, to_char(time, 'yyyy-MM-DD') as x FROM main_device_params as MDP INNER JOIN core_device AS CD on MDP.fk_core_device = CD.pk_core_device INNER JOIN core_license CL on CD.fk_core_license = CL.pk_core_license WHERE pk_core_license = $1 AND extract(year from time) = $2 AND extract(month from time) = $3 GROUP BY x, cd.pk_core_device ORDER BY x;`,
+
+  GET_TOTAL: `
+    SELECT sum(mdp.amps) as current, sum(mdp.watts) as power, count(mdp.amps), mdp.fk_core_device as id, device.name
+    FROM main_device_params AS MDP
+      inner join core_device device on MDP.fk_core_device = device.pk_core_device
+    WHERE extract(year from mdp.time) = $1
+      AND extract(month from mdp.time) = $2
+    GROUP BY mdp.fk_core_device, name
+  `,
 }

@@ -15,13 +15,17 @@ class Device {
     return this.db.any(query);
   }
   findById(id) {
-    return this.db.one(sql.FIND_BY_ID, [id]);
+    return this.db.one(sql.FIND, [id]);
   }
   findByIdAndUser(id,userId) {
     return this.db.one(sql.FIND_BY_ID_AND_USER, [id,userId])
   }
   updateData(id, { name, voltage }) {
     return this.db.none(sql.UPDATE_DATA, [id,name,voltage]);
+  }
+  updatePreference(deviceId, userId, notifiable) {
+    console.log({ userId, deviceId, notifiable})
+    return this.db.none(sql.UPDATE_PREFERENCE, [userId, deviceId, notifiable])
   }
   getAll(userId) {
     return this.db.any(sql.FIND_BY_LICENSE, [userId]);

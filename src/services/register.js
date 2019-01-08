@@ -7,6 +7,20 @@ import {
   UserPreferenceDAO
 } from '../daos';
 
+async function verifyCode(code) {
+  const license = new LicenseDAO(db);
+
+  try {
+    let _license = await license.select(code);
+    if (_license) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch(err) {
+    throw err;
+  }
+}
 function userRegister(userId,code) {
   return db.task(async t => {
     const user = new UserDAO(t);
@@ -40,8 +54,6 @@ function userRegister(userId,code) {
           return {
             status: 200,
             body: {
-              hasLicense: true,
-              message: 'License successfully linked',
               token
             }
           }
@@ -126,6 +138,7 @@ export default {
   userRegister,
   deviceRegister,
   tokenRegister,
+  verifyCode
 }
 
 function createPreference(users, devices) {

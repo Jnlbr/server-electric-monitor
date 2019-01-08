@@ -1,20 +1,5 @@
 import { registerService } from '../services';
 
-const userRegister = async (req,res) => {
-  const send = (status,body) => res.status(status).send({ status, body });
-  const { userId } = req.ids;
-  const code = req.body.code;
-  
-  registerService.userRegister(userId,code)
-  .then(({status,body}) => send(status,body))
-  .catch(err => {
-    // ADD LOGGER
-    console.log('USER REGISTER ERR: ' + err.message);
-    console.log(err);
-    send(500, err.message || err);
-  });
-}
-
 const deviceRegister = async (req,res) => {
   const send = (status,body) => res.status(status).send({status,body});
   const { type, name, voltage } = req.body;
@@ -50,7 +35,6 @@ const tokenRegister = async (req,res) => {
 }
 
 export default {
-  userRegister,
   deviceRegister,
   tokenRegister
 }

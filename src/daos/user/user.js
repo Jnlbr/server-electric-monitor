@@ -8,8 +8,8 @@ class User {
     this.table = 'core_app_user';
   }
   
-  create({email,username,firstname,lastname,password}) {
-    return this.db.one(sql.USER_CREATE,[email,username,password,firstname,lastname]);
+  create({email,username,name,password}) {
+    return this.db.one(sql.USER_CREATE,[email,username,password,name]);
   }
   update({column,value,userId}) {
     return this.db.none(sql.USER_UPDATE, [column,value,userId]);
@@ -24,8 +24,8 @@ class User {
     let query = this.qm.select(this.table, columns).equal(index,value).make();
     return this.db.any(query);
   }
-  getTokens(licenseId) {
-    return this.db.manyOrNone(sql.GET_TOKENS, [licenseId]);
+  getTokens(licenseId,deviceId) {
+    return this.db.manyOrNone(sql.GET_TOKENS, [licenseId,deviceId]);
   }
 }
 

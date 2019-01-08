@@ -69,6 +69,7 @@ async function getAllByMonth(licenseId,year,month) {
 
     queries.push(paramsDAO.getAllCurrentByMonth(licenseId, year, month));
     queries.push(paramsDAO.getAllPowerByMonth(licenseId, year, month));
+    queries.push(paramsDAO.getTotal(year,month))
 
     return await t.batch(queries);
   })
@@ -77,16 +78,35 @@ async function getAllByMonth(licenseId,year,month) {
     let current = group(data[0], colors);
     let power = group(data[1], colors);
 
-    // return [
-    //   {
-    //     seriesName: 'Current',
-    //     data: current
-    //   }, {
-    //     seriesName: 'Power',
-    //     data: power
-    //   }
-    // ]
-    return { current, power }
+    let total = data[2].map(d => ({
+      ...d,
+      color: (colors.find(c => d.id === c.id)).color
+    }))
+
+    let totalCurrent = total.map(t => ({
+      label: t.name,
+      value: t.current/10,
+      color: t.color
+    }))
+    let totalPower = total.map(t => ({
+      label: t.name,
+      value: t.power/10,
+      color: t.color
+    }))
+
+    return [{
+      seriesName: 'Corriente',
+      total: {
+        current: totalCurrent,
+        power: totalPower,
+      },
+      data: current,
+      color: 'blue'
+    }, {
+      seriesName: 'Potencia',
+      data: power,
+      color: 'green'
+    }]
   })
   .catch(err => {
     throw err;
@@ -103,7 +123,7 @@ export default {
 }
 
 function randomColor() { 
-  let colors = ['blue', 'green', 'red', 'purple', 'yellow', 'gray']
+  let colors = ['blue', 'green', 'red', 'purple', 'yellow', 'gray', 'black', 'orange', 'pink', 'beige']
   return colors[Math.floor(Math.random() * colors.length)];
 }
 

@@ -38,17 +38,6 @@ function getAll(userId) {
   });
 }
 
-async function getPreference(userId, deviceId) {
-  const userPreferenceDAO = new UserPreferenceDAO(db);
-
-  try {
-    const preferences = userPreferenceDAO.getDevicePreference(userId,deviceId);
-    return preferences;
-  } catch(err) {
-    throw err;
-  }
-}
-
 function setPreference(preferences) {
 
   return db.tx(async t => {
@@ -62,11 +51,12 @@ function setPreference(preferences) {
   });
 }
 
-async function updateData(id, userId, { name, voltage }) {
+async function updateData(id, userId, { name, voltage, notifiable }) {
   const deviceDAO = new DeviceDAO(db);
 
   try {
     await deviceDAO.updateData(id, { name, voltage });
+    await deviceDAO.updatePreference(id, userId, notifiable);
     return await deviceDAO.findByIdAndUser(id,userId);
   } catch (err) {
     throw err;
@@ -95,7 +85,6 @@ async function getAllParams(id, from) {
 
 export default {
   getAll,
-  getPreference,
   setPreference,
   updateData,
   getParams,

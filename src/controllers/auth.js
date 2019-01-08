@@ -15,6 +15,11 @@ const userData = async (req,res) => {
     send(200, data);
   })
   .catch(err => {
+    console.log(`
+      PACKAGE: controllers/auth
+      METHOD: userData
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err);
   });
 }
@@ -43,27 +48,33 @@ const signup = async (req, res) => {
         }          
         else {
           console.log('AUTH_SIGN_UP: NEW USER');
-          const hash = crypt.hash(password);
-          let _user = await user.create({...req.body, password: hash});
-          return registerService.userRegister(_user.id, code)
-          .then(({status, body}) => {
-            console.log(status);
-            console.log(body);
-            return send(status, {
-              ...body,
-              email,
-              username,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-            })
-          })
-          .catch(err => {
-            // ADD LOGGER
-            console.log('USER REGISTER ERR: ' + err.message);
-            console.log(err);
-            return send(500, err.message || err);
-          })
-          return send(200, { hasLicense: false, token });
+          let valid = await registerService.verifyCode(code);
+          if(valid) {
+            const hash = crypt.hash(password);
+            let _user = await user.create({ ...req.body, password: hash });
+            return registerService.userRegister(_user.id, code)
+              .then(({ status, body }) => {
+                console.log(status);
+                console.log(body);
+                return send(status, {
+                  ...body,
+                  email,
+                  username,
+                  name: req.body.name,
+                })
+              })
+              .catch(err => {
+                console.log(`
+                  PACKAGE: controllers/auth
+                  METHOD: signUp
+                  SIGNATURE: registerService.verifyCode
+                  ERROR: ${err.message || err}
+                `);
+                return send(500, err.message || err);
+              })
+          } else {
+            return send(400, { message: 'Invalid code' });
+          }
         }
       }
     })
@@ -82,17 +93,14 @@ const signup = async (req, res) => {
 const login = async (req,res) => {
   const send = (status, body) => res.status(status).send({ status, body });
   const { username, password } = req.body;
-  
-  console.log(req.body)
   const user = new UserDAO(db);
+
   try {
-    console.log(username)
     let index = validator.isEmail(username) ? 'email' : 'username';
-    let _user = await user.find(index, username, ['fk_core_license', 'pk_core_app_user', 'email', 'username', 'firstname', 'lastname', 'password']);
+    let _user = await user.find(index, username, ['fk_core_license', 'pk_core_app_user', 'email', 'username', 'name','password']);    
     _user = _user[0];
     if(_user) {
       const isMatch = await crypt.compare(password, _user.password);
-
       if (isMatch) {
         let hasLicense = _user.fkcorelicense ? true : false;
         let token = hasLicense ? signToken({ userId: _user.pkcoreappuser, licenseId: _user.fkcorelicense }) : signToken({ userId: _user.pkcoreappuser });
@@ -108,10 +116,14 @@ const login = async (req,res) => {
         send(400, { message: 'Invalid credentials' })
       }
     } else {
-      send(200, { message: 'User does not exist'});
+      send(400, { message: 'User does not exist'});
     }    
   } catch(err) {
-    console.log(err);
+    console.log(`
+      PACKAGE: controllers/auth
+      METHOD: logIn
+      ERROR: ${err.message || err}
+    `);
     send(500, err.message || err);
   }
 }

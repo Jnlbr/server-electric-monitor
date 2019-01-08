@@ -33,6 +33,9 @@ class Params {
     return this.db.manyOrNone(sql.GET_ALL_POWER_BY_MONTH, [licenseId, year, month])
   }
 
+  getTotal(year, month) {
+    return this.db.many(sql.GET_TOTAL, [year, month]);
+  }
 }
 
 export default Params;

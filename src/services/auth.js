@@ -5,7 +5,7 @@ async function userData(id) {
   const userDAO = new UserDAO(db);
 
   try {    
-    let user = await userDAO.find('pk_core_app_user', id, ['email', 'fk_core_license', 'username', 'firstname', 'lastname' ]);
+    let user = await userDAO.find('pk_core_app_user', id, ['email', 'fk_core_license', 'username', 'name']);
     user = user[0];
     let hasLicense = user.fkcorelicense ? true : false;  
     delete user['fkcorelicense'];
@@ -18,6 +18,11 @@ async function userData(id) {
   }
 }
 
+async function signUp() {
+  
+}
+
 export default {
   userData,
+  signUp
 }
