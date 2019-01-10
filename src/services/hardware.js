@@ -7,10 +7,11 @@ async function add(id, current) {
     const deviceDAO = new DeviceDAO(t);
     try {
       let device = await deviceDAO.findById(id);
-      let power = current * device.voltage;            
+      current = current/10;
+      let power = (current) * device.voltage;      
       await paramsDAO.add(id, {current,power})      
-      power = Math.round((current * device.voltage) * 100) / 100
-      current = Math.round(current * 100) / 100
+      power = Math.round((current * device.voltage) * 1000) / 1000
+      current = Math.round(current * 1000) / 1000
       console.log({ current, power })
       return { amps: current, watts: power };
     } catch (err) {
@@ -95,7 +96,7 @@ async function getAllByMonth(licenseId,year,month) {
     }))
 
     return [{
-      seriesName: 'Corriente',
+      seriesName: 'Corriente (A)',
       total: {
         current: totalCurrent,
         power: totalPower,
@@ -103,7 +104,7 @@ async function getAllByMonth(licenseId,year,month) {
       data: current,
       color: 'blue'
     }, {
-      seriesName: 'Potencia',
+      seriesName: 'Potencia (W)',
       data: power,
       color: 'green'
     }]

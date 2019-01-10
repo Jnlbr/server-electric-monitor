@@ -47,11 +47,12 @@ export default {
    * 
    */
   GET_TOKENS: `
-    SELECT CAU.notification_token as token
+    SELECT CAU.notification_token as token, device.name
     FROM core_app_user AS CAU
       INNER JOIN core_license cl on CAU.fk_core_license = cl.pk_core_license
       INNER JOIN main_device_preference MDP on CAU.pk_core_app_user = MDP.fk_core_app_user
       INNER JOIN main_notification_preference MNP on MDP.pk_main_device_pref = MNP.fk_main_device_pref
+      INNER JOIN core_device device on MDP.fk_core_device = device.pk_core_device
     WHERE cl.pk_core_license = $1
       AND MDP.fk_core_device = $2
       AND MNP.status = true

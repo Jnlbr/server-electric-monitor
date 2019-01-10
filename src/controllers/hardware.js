@@ -4,22 +4,32 @@ const addParams = (req,res) => {
   let { id, current } = req.body;
   const send = (status, body) => res.status(status).send({ status, body });
   
-  current = parseFloat(current);  
-  hardwareService.add(id,current)
-  .then((params) => {
-    req.socket.of('/user').emit('params:' + id, {
-        ...params
-    });
-    send(200, { 'message': 'success' });
-  })
-  .catch(err => {
+  if(current == null || current == '' || isNaN(current)) {
+    let log = 'Current must not be null';
     console.log(`
+      PACKAGE: controllers/hardware
+      METHOD: addParams
+      ERROR: ${log}
+    `);
+    send(400, log);
+  } else {
+    current = parseFloat(current);
+    hardwareService.add(id, current)
+      .then((params) => {
+        req.socket.of('/user').emit('params:' + id, {
+          ...params
+        });
+        send(200, { 'message': 'success' });
+      })
+      .catch(err => {
+        console.log(`
       PACKAGE: controllers/hardware
       METHOD: addParams
       ERROR: ${err.message || err}
     `);
-    send(400, err.message || err)
-  });
+        send(400, err.message || err)
+      });
+  }
 }
 
 const updateStatus = (req,res) => {
@@ -32,7 +42,7 @@ const updateStatus = (req,res) => {
   hardwareService.updateStatus(id, status)
   .then(() => {
     socket.emit('stateChange:' + id, status);
-    let message = status ? 'Dispositivo encendido' : ' Dispositivo apagado';
+    let message = status ? ' fue encendido' : ' fue apagado';
     notificationService.sendMessage(req.ids.licenseId, id, message);
     send(200, { message: 'Success' });
   })
@@ -90,11 +100,11 @@ const getByMonth = (req, res) => {
   .then(data => {
     send(200, [
       {
-        seriesName: 'Corriente',
+        seriesName: 'Corriente (A)',
         data: data[0],
         color: 'blue'
       }, {
-        seriesName: 'Potencia',
+        seriesName: 'Potencia (W)',
         data: data[1],
         color: 'green'
       }

@@ -6,12 +6,22 @@ const updateActive = (req,res) => {
   const { id, active } = req.body;
 
   deviceService.updateActive(id,active)
-  .then(() => {
-    let message = active ? 'activated':'desactivated';
-    console.log(active)
-    send(200, `Success, device was ${message}`);
+  .then((device) => {
+    let status = device.status;
+    let message = `Success, device was ${(active ? 'activated' : 'desactivated')}`
+    console.log(`
+      PACKAGE: controllers/device
+      METHOD: updateActive
+      MESSAGE: ${message}
+    `);
+    res.status(200).send(status);
   })
   .catch(err => {
+    console.log(`
+      PACKAGE: controllers/device
+      METHOD: updateActive
+      ERROR: ${err.message || err}
+    `);
     send(400, err.message || err);
   })
 }
@@ -55,30 +65,6 @@ const setPreference = (req,res) => {
   })
 }
 
-const getParams = (req,res) => {
-  const { id, from } = req.params;
-
-  deviceService.getParams(id,from)
-  .then(data => {
-
-  })
-  .catch(err => {
-
-  })
-}
-
-const getAllParams = (req,res) => {
-  const { from } = req.params;
-
-  deviceService.getParams(id, from)
-  .then(data => {
-
-  })
-  .catch(err => {
-
-  })
-}
-
 const updateData = (req,res) => {
   const { id, name, voltage, notifiable } = req.body;
   const { userId } = req.ids;
@@ -106,8 +92,6 @@ export default {
   getAll,
   setPreference,
   updateData,
-  getParams,
-  getAllParams,
   deleteDevice,
   updateActive
 }

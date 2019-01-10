@@ -6,7 +6,7 @@ async function updateActive(id,active) {
 
   try {
     await deviceDAO.updateActive(id,active)
-    return;
+    return await deviceDAO.findById(id);
   } catch (err) {
     throw err;
   }
@@ -63,32 +63,10 @@ async function updateData(id, userId, { name, voltage, notifiable }) {
   }
 }
 
-async function getParams(id, from) {
-  const paramsDAO = new ParamsDAO(db);
-
-  try {
-
-  } catch(err) {
-    throw err;
-  }
-}
-
-async function getAllParams(id, from) {
-  const paramsDAO = new ParamsDAO(db);
-
-  try {
-
-  } catch (err) {
-    throw err;
-  }
-}
-
 export default {
   getAll,
   setPreference,
   updateData,
-  getParams,
-  getAllParams,
   deleteDevice,
   updateActive
 }

@@ -6,15 +6,15 @@ export default (tokens, message) => {
 
   let messages = [];
   for (let pushToken of tokens) {
-    if (!Expo.isExpoPushToken(pushToken)) {
+    if (!Expo.isExpoPushToken(pushToken.token)) {
       console.error(`Push token ${pushToken} is not a valid Expo push token`);
       continue;
     }
     messages.push({
-      to: pushToken,
+      to: pushToken.token,
       sound: 'default',
-      body: message,
-      data: { withSome: message },
+      body: pushToken.name + message,
+      data: { withSome: pushToken.name + message, },
     })
   }
 

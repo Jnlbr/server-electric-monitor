@@ -8,7 +8,6 @@ async function sendMessage(licenseId, deviceId, message) {
   try {
     let tokens = await userDAO.getTokens(licenseId,deviceId);
     console.log('USER TOKENS: ');
-    tokens = tokens.map(t => t.token);
     console.log(tokens);
     sendExpoNotification(tokens, message);
   } catch(err) {
